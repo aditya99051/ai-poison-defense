@@ -20,7 +20,6 @@
 </head>
 <body class="bg-[#050814] text-slate-200 min-h-screen pb-20 md:pb-10 selection:bg-cyan-500 selection:text-slate-900">
 
-  <!-- Ambient background cyber grid -->
   <div class="fixed inset-0 bg-[linear-gradient(to_right,#0f172a15_1px,transparent_1px),linear-gradient(to_bottom,#0f172a15_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none"></div>
 
   <div class="max-w-7xl mx-auto p-4 md:p-8 relative z-10 space-y-6">
@@ -34,20 +33,23 @@
         <div>
           <div class="flex items-center gap-2.5">
             <h1 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">Spectral<span class="text-cyan-400">Shield</span></h1>
-            <span class="text-[10px] tracking-wider font-bold uppercase px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-800/60">SOC Guard AI</span>
+            <span class="text-[10px] tracking-wider font-bold uppercase px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-800/60">SOC GUARD AI</span>
+            <span class="text-[10px] tracking-wider font-bold uppercase px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-800/60">NIST AI-RMF COMPLIANT</span>
           </div>
           <p class="text-xs text-slate-400">Autonomous Adversarial Data Poisoning & Trigger Quarantine Gateway</p>
         </div>
       </div>
 
-      <!-- Live SOC Nodes Status -->
-      <div class="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-end">
+      <div class="flex items-center gap-2.5 self-stretch sm:self-auto justify-between sm:justify-end flex-wrap">
+        <a href="/docs" target="_blank" class="glass-card hover:border-cyan-500/50 px-3 py-1.5 rounded-xl text-xs mono flex items-center gap-1.5 text-cyan-300 transition">
+          <i class="fa-solid fa-code"></i> API Docs
+        </a>
         <div class="glass-card px-3 py-1.5 rounded-xl text-xs mono flex items-center gap-2">
           <span class="relative flex h-2 w-2">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </span>
-          <span class="text-slate-300 font-semibold">SPECTRAL CLUSTER: ACTIVE</span>
+          <span class="text-slate-300 font-semibold">CLUSTER: ACTIVE</span>
         </div>
         <button id="pwaInstallBtn" class="hidden bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-3 py-1.5 rounded-xl text-xs transition flex items-center gap-1.5 shadow-md">
           <i class="fa-solid fa-download"></i> Install App
@@ -55,16 +57,23 @@
       </div>
     </header>
 
-    <!-- Upload & Ingestion Center -->
+    <!-- Client Tenant Selector & Ingestion Pipeline -->
     <div class="glass-card p-5 sm:p-7 rounded-3xl glow-cyan space-y-4">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div>
           <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-cloud-arrow-up text-cyan-400"></i> Secure Dataset Ingestion Pipeline
+            <i class="fa-solid fa-cloud-arrow-up text-cyan-400"></i> Enterprise Ingestion Pipeline
           </h2>
-          <p class="text-xs text-slate-400">Upload enterprise batch data (CSV) for SVD covariance anomaly inspection</p>
+          <p class="text-xs text-slate-400">Ingest model training batch data for covariance spectral anomaly inspection</p>
         </div>
-        <span class="text-[11px] mono text-slate-400 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-lg">Supported: CSV / Max 50MB</span>
+        <div class="flex items-center gap-2 w-full sm:w-auto">
+          <label class="text-xs text-slate-400 mono">Tenant:</label>
+          <select id="tenantSelect" class="bg-slate-900 border border-slate-700 text-cyan-300 text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:border-cyan-400 flex-1 sm:flex-initial">
+            <option value="HDFC-Bank-Fraud-Model">HDFC Bank (Fraud Risk Engine)</option>
+            <option value="Flipkart-Recommender-AI">Flipkart (RecSys Pipeline)</option>
+            <option value="Apollo-Health-Diagnostics">Apollo Health (Diagnostic Model)</option>
+          </select>
+        </div>
       </div>
 
       <!-- Dropzone -->
@@ -83,16 +92,17 @@
         <div class="text-xs text-slate-400 flex items-center gap-2">
           <i class="fa-solid fa-microchip text-cyan-500"></i> Algorithm: Subspace Singular Value Decomposition ($V^T$)
         </div>
-        <button onclick="executeDefenseAudit()" id="auditBtn" class="w-full sm:w-auto bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-extrabold px-7 py-3 rounded-2xl text-sm transition shadow-lg shadow-cyan-500/25 flex items-center justify-center gap-2">
-          <i class="fa-solid fa-bolt"></i> Run Deep Defense Audit
-        </button>
+        <div class="flex gap-2 w-full sm:w-auto">
+          <button onclick="executeDefenseAudit()" id="auditBtn" class="w-full sm:w-auto bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-extrabold px-6 py-3 rounded-2xl text-sm transition shadow-lg shadow-cyan-500/25 flex items-center justify-center gap-2">
+            <i class="fa-solid fa-bolt"></i> Run Security Audit
+          </button>
+        </div>
       </div>
 
-      <!-- Progress / Loading Bar -->
       <div id="loadingBox" class="hidden pt-3 space-y-2">
         <div class="flex justify-between text-xs mono text-cyan-400">
           <span>RUNNING COVARIANCE SVD MATRIX...</span>
-          <span class="animate-pulse">ISOLATING TRIGGERS</span>
+          <span class="animate-pulse">ISOLATING BACKDOOR TRIGGERS</span>
         </div>
         <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden p-0.5 border border-slate-800">
           <div class="bg-gradient-to-r from-cyan-500 to-blue-500 h-full rounded-full w-2/3 animate-[pulse_1s_infinite]"></div>
@@ -100,7 +110,7 @@
       </div>
     </div>
 
-    <!-- Results SOC Panel -->
+    <!-- Results Panel -->
     <div id="resultsDashboard" class="hidden space-y-6">
 
       <!-- Executive KPI Cards -->
@@ -162,29 +172,70 @@
         </div>
       </div>
 
-      <!-- Quarantined Threat Telemetry Table & Export -->
+      <!-- Threat Quarantined Telemetry & Export Actions -->
       <div class="glass-card p-5 sm:p-6 rounded-3xl space-y-4">
         <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3">
           <div>
             <h3 class="text-sm font-bold text-white flex items-center gap-2">
               <i class="fa-solid fa-shield-virus text-red-400"></i> Quarantined Threat Telemetry
             </h3>
-            <p class="text-xs text-slate-400">Indices of poisoned row vectors segregated from model training queue</p>
+            <p class="text-xs text-slate-400">Backdoor poisoned vectors segregated from training queue</p>
           </div>
-          <button onclick="exportAuditReport()" class="self-start sm:self-auto bg-slate-900 hover:bg-slate-800 border border-slate-700 text-cyan-300 font-semibold px-4 py-2 rounded-xl text-xs transition flex items-center gap-2 shadow-sm">
-            <i class="fa-solid fa-download"></i> Export Audit Certificate (.JSON)
-          </button>
+          <div class="flex gap-2 flex-wrap">
+            <button onclick="downloadSanitizedCSV()" class="bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs transition flex items-center gap-2 shadow-sm">
+              <i class="fa-solid fa-file-circle-check"></i> Download Sanitized Dataset (.CSV)
+            </button>
+            <button onclick="exportAuditReport()" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-cyan-300 font-semibold px-4 py-2 rounded-xl text-xs transition flex items-center gap-2 shadow-sm">
+              <i class="fa-solid fa-download"></i> Export Audit Certificate (.JSON)
+            </button>
+          </div>
         </div>
 
-        <div id="quarantineTagsBox" class="flex flex-wrap gap-2 max-h-48 overflow-y-auto p-3 bg-slate-950/60 rounded-2xl border border-slate-900"></div>
+        <div id="quarantineTagsBox" class="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-3 bg-slate-950/60 rounded-2xl border border-slate-900"></div>
       </div>
 
+    </div>
+
+    <!-- Enterprise Audit History Database Table -->
+    <div class="glass-card p-5 sm:p-6 rounded-3xl space-y-4">
+      <div class="flex justify-between items-center">
+        <div>
+          <h3 class="text-sm font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-database text-cyan-400"></i> Enterprise Audit Trail (Database Telemetry)
+          </h3>
+          <p class="text-xs text-slate-400">Persistent SQLite audit trail of all verified client datasets</p>
+        </div>
+        <button onclick="loadAuditHistory()" class="text-xs mono text-cyan-400 hover:underline">
+          <i class="fa-solid fa-arrows-rotate"></i> Refresh History
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs mono text-slate-300">
+          <thead class="bg-slate-900/80 text-slate-400 border-b border-slate-800 uppercase">
+            <tr>
+              <th class="py-2.5 px-3">Scan ID</th>
+              <th class="py-2.5 px-3">Tenant Client</th>
+              <th class="py-2.5 px-3">Dataset</th>
+              <th class="py-2.5 px-3">Rows</th>
+              <th class="py-2.5 px-3">Quarantined</th>
+              <th class="py-2.5 px-3">Hygiene</th>
+              <th class="py-2.5 px-3">Latency</th>
+              <th class="py-2.5 px-3">Timestamp</th>
+            </tr>
+          </thead>
+          <tbody id="historyTableBody" class="divide-y divide-slate-800/60">
+            <tr>
+              <td colspan="8" class="text-center py-4 text-slate-500">No telemetry recorded yet. Run a scan above!</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
   </div>
 
   <script>
-    // PWA Service Worker Registration (Fixed to root path)
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js');
     }
@@ -220,28 +271,27 @@
         return;
       }
 
+      const tenant = document.getElementById('tenantSelect').value;
       const fd = new FormData();
       fd.append("file", fileInput.files[0]);
 
       document.getElementById('loadingBox').classList.remove('hidden');
       document.getElementById('auditBtn').disabled = true;
 
-      const t0 = performance.now();
-
       try {
-        const response = await fetch('/audit-csv', { method: 'POST', body: fd });
+        const response = await fetch('/api/v1/scan/audit-csv', {
+          method: 'POST',
+          headers: { 'x-tenant-id': tenant },
+          body: fd
+        });
         const data = await response.json();
         lastAuditData = data;
 
-        const scanTime = Math.round(performance.now() - t0);
-
-        // Update KPI metrics
-        document.getElementById('valLatency').innerText = `${scanTime}ms`;
+        document.getElementById('valLatency').innerText = `${data.latency_ms}ms`;
         document.getElementById('valTotalRecords').innerText = data.total_records.toLocaleString();
         document.getElementById('valQuarantined').innerText = data.quarantined_count.toLocaleString();
         document.getElementById('valHygiene').innerText = data.hygiene_score;
 
-        // Render Quarantined Row Chips
         const tagBox = document.getElementById('quarantineTagsBox');
         tagBox.innerHTML = '';
         data.quarantined_indices.forEach(idx => {
@@ -251,7 +301,6 @@
           tagBox.appendChild(chip);
         });
 
-        // Render Purity Chart
         const cleanCount = data.total_records - data.quarantined_count;
         if (purityChart) purityChart.destroy();
         const ctxPurity = document.getElementById('purityChartCanvas').getContext('2d');
@@ -266,13 +315,9 @@
               hoverOffset: 6
             }]
           },
-          options: {
-            cutout: '72%',
-            plugins: { legend: { display: false } }
-          }
+          options: { cutout: '72%', plugins: { legend: { display: false } } }
         });
 
-        // Render SVD Energy Chart
         if (energyChart) energyChart.destroy();
         const ctxEnergy = document.getElementById('energyChartCanvas').getContext('2d');
         energyChart = new Chart(ctxEnergy, {
@@ -308,11 +353,56 @@
         });
 
         document.getElementById('resultsDashboard').classList.remove('hidden');
+        loadAuditHistory();
       } catch (err) {
-        alert("Defense Audit Pipeline Failure: " + err);
+        alert("Defense Pipeline Error: " + err);
       } finally {
         document.getElementById('loadingBox').classList.add('hidden');
         document.getElementById('auditBtn').disabled = false;
+      }
+    }
+
+    async function downloadSanitizedCSV() {
+      const fileInput = document.getElementById('csvFileInput');
+      if (!fileInput.files.length) return;
+      const fd = new FormData();
+      fd.append("file", fileInput.files[0]);
+
+      const res = await fetch('/api/v1/scan/sanitize-and-export', { method: 'POST', body: fd });
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `sanitized_${fileInput.files[0].name}`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    async function loadAuditHistory() {
+      try {
+        const res = await fetch('/api/v1/telemetry/recent-audits');
+        const rows = await res.json();
+        const tbody = document.getElementById('historyTableBody');
+        if (!rows.length) return;
+        tbody.innerHTML = '';
+        rows.forEach(r => {
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-slate-900/50';
+          tr.innerHTML = `
+            <td class="py-2 px-3 text-cyan-400 font-semibold">${r.scan_id}</td>
+            <td class="py-2 px-3 text-white">${r.tenant}</td>
+            <td class="py-2 px-3 text-slate-400">${r.dataset}</td>
+            <td class="py-2 px-3">${r.records}</td>
+            <td class="py-2 px-3 text-red-400 font-bold">${r.quarantined}</td>
+            <td class="py-2 px-3 text-emerald-400">${r.hygiene}</td>
+            <td class="py-2 px-3 text-slate-400">${r.latency}</td>
+            <td class="py-2 px-3 text-slate-500">${r.timestamp}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (e) {
+        console.error(e);
       }
     }
 
@@ -321,11 +411,13 @@
       const jsonContent = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(lastAuditData, null, 2));
       const anchor = document.createElement('a');
       anchor.setAttribute("href", jsonContent);
-      anchor.setAttribute("download", `audit_certificate_${Date.now()}.json`);
+      anchor.setAttribute("download", `audit_certificate_${lastAuditData.scan_id}.json`);
       document.body.appendChild(anchor);
       anchor.click();
       anchor.remove();
     }
+
+    window.addEventListener('load', loadAuditHistory);
   </script>
 </body>
 </html>
