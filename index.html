@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>SpectralShield™ Enterprise AI Security Platform</title>
-  <link rel="manifest" href="/static/manifest.json">
+  <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#06b6d4">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -184,9 +184,9 @@
   </div>
 
   <script>
-    // PWA Service Worker Registration
+    // PWA Service Worker Registration (Fixed to root path)
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/static/sw.js');
+      navigator.serviceWorker.register('/sw.js');
     }
 
     let deferredPrompt;
@@ -194,11 +194,13 @@
       e.preventDefault();
       deferredPrompt = e;
       const installBtn = document.getElementById('pwaInstallBtn');
-      installBtn.classList.remove('hidden');
-      installBtn.addEventListener('click', () => {
-        installBtn.classList.add('hidden');
-        deferredPrompt.prompt();
-      });
+      if (installBtn) {
+        installBtn.classList.remove('hidden');
+        installBtn.addEventListener('click', () => {
+          installBtn.classList.add('hidden');
+          deferredPrompt.prompt();
+        });
+      }
     });
 
     let purityChart = null;
