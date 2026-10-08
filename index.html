@@ -13,220 +13,195 @@
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
     .mono { font-family: 'JetBrains Mono', monospace; }
-    .glass-card { background: rgba(13, 20, 36, 0.75); backdrop-filter: blur(20px); border: 1px solid rgba(30, 41, 59, 0.8); }
-    .glow-cyan { box-shadow: 0 0 35px -5px rgba(6, 182, 212, 0.25); }
-    .glow-danger { box-shadow: 0 0 30px -5px rgba(239, 68, 68, 0.2); }
+    .glass-card { background: rgba(13, 20, 36, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(30, 41, 59, 0.8); }
+    .glow-cyan { box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.25); }
+    .glow-danger { box-shadow: 0 0 20px -5px rgba(239, 68, 68, 0.2); }
   </style>
 </head>
-<body class="bg-[#050814] text-slate-200 min-h-screen pb-20 md:pb-10 selection:bg-cyan-500 selection:text-slate-900">
+<body class="bg-[#050814] text-slate-200 min-h-screen selection:bg-cyan-500 selection:text-slate-900 pb-16">
 
-  <div class="fixed inset-0 bg-[linear-gradient(to_right,#0f172a15_1px,transparent_1px),linear-gradient(to_bottom,#0f172a15_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none"></div>
+  <div class="fixed inset-0 bg-[linear-gradient(to_right,#0f172a15_1px,transparent_1px),linear-gradient(to_bottom,#0f172a15_1px,transparent_1px)] bg-[size:2rem_2rem] pointer-events-none"></div>
 
-  <div class="max-w-7xl mx-auto p-4 md:p-8 relative z-10 space-y-6">
+  <div class="w-full max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8 relative z-10 space-y-4 sm:space-y-6">
 
-    <!-- Top Enterprise Header -->
-    <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800/80 pb-5">
-      <div class="flex items-center gap-3.5">
-        <div class="h-12 w-12 rounded-2xl bg-gradient-to-tr from-cyan-600 via-cyan-500 to-blue-600 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-cyan-500/30 text-2xl">
-          <i class="fa-solid fa-shield-halved text-white"></i>
-        </div>
-        <div>
-          <div class="flex items-center gap-2.5">
-            <h1 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">Spectral<span class="text-cyan-400">Shield</span></h1>
-            <span class="text-[10px] tracking-wider font-bold uppercase px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-800/60">SOC GUARD AI</span>
-            <span class="text-[10px] tracking-wider font-bold uppercase px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-800/60">NIST AI-RMF COMPLIANT</span>
+    <!-- Top Header -->
+    <header class="flex flex-col gap-3 border-b border-slate-800 pb-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center text-white shadow-md text-xl">
+            <i class="fa-solid fa-shield-halved"></i>
           </div>
-          <p class="text-xs text-slate-400">Autonomous Adversarial Data Poisoning & Trigger Quarantine Gateway</p>
+          <div>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <h1 class="text-lg sm:text-2xl font-extrabold text-white">Spectral<span class="text-cyan-400">Shield</span></h1>
+              <span class="text-[9px] sm:text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">SOC AI</span>
+            </div>
+            <p class="text-[11px] sm:text-xs text-slate-400 leading-tight">Adversarial Data Poisoning Quarantine Gateway</p>
+          </div>
         </div>
+
+        <button id="pwaInstallBtn" class="hidden bg-cyan-500 text-slate-950 font-bold px-3 py-1.5 rounded-xl text-xs flex items-center gap-1.5 shadow">
+          <i class="fa-solid fa-download"></i> Install
+        </button>
       </div>
 
-      <div class="flex items-center gap-2.5 self-stretch sm:self-auto justify-between sm:justify-end flex-wrap">
-        <a href="/docs" target="_blank" class="glass-card hover:border-cyan-500/50 px-3 py-1.5 rounded-xl text-xs mono flex items-center gap-1.5 text-cyan-300 transition">
+      <div class="flex items-center justify-between gap-2 pt-1 text-[11px] mono flex-wrap">
+        <div class="flex items-center gap-1.5 text-emerald-400 bg-emerald-950/40 border border-emerald-800/60 px-2.5 py-1 rounded-lg">
+          <span class="h-2 w-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <span>CLUSTER: ONLINE</span>
+        </div>
+        <a href="/docs" target="_blank" class="text-cyan-400 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-lg flex items-center gap-1">
           <i class="fa-solid fa-code"></i> API Docs
         </a>
-        <div class="glass-card px-3 py-1.5 rounded-xl text-xs mono flex items-center gap-2">
-          <span class="relative flex h-2 w-2">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-          </span>
-          <span class="text-slate-300 font-semibold">CLUSTER: ACTIVE</span>
-        </div>
-        <button id="pwaInstallBtn" class="hidden bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-3 py-1.5 rounded-xl text-xs transition flex items-center gap-1.5 shadow-md">
-          <i class="fa-solid fa-download"></i> Install App
-        </button>
       </div>
     </header>
 
-    <!-- Client Tenant Selector & Ingestion Pipeline -->
-    <div class="glass-card p-5 sm:p-7 rounded-3xl glow-cyan space-y-4">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-        <div>
-          <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-cloud-arrow-up text-cyan-400"></i> Enterprise Ingestion Pipeline
-          </h2>
-          <p class="text-xs text-slate-400">Ingest model training batch data for covariance spectral anomaly inspection</p>
-        </div>
+    <!-- Ingestion & Upload Section -->
+    <div class="glass-card p-4 sm:p-6 rounded-2xl glow-cyan space-y-3">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-cloud-arrow-up text-cyan-400"></i> Dataset Ingestion Pipeline
+        </h2>
         <div class="flex items-center gap-2 w-full sm:w-auto">
-          <label class="text-xs text-slate-400 mono">Tenant:</label>
-          <select id="tenantSelect" class="bg-slate-900 border border-slate-700 text-cyan-300 text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:border-cyan-400 flex-1 sm:flex-initial">
-            <option value="HDFC-Bank-Fraud-Model">HDFC Bank (Fraud Risk Engine)</option>
+          <label class="text-[11px] text-slate-400 mono">Tenant:</label>
+          <select id="tenantSelect" class="bg-slate-900 border border-slate-700 text-cyan-300 text-xs rounded-lg px-2.5 py-1 w-full sm:w-auto focus:outline-none">
+            <option value="HDFC-Bank-Fraud-Model">HDFC Bank (Fraud Engine)</option>
             <option value="Flipkart-Recommender-AI">Flipkart (RecSys Pipeline)</option>
-            <option value="Apollo-Health-Diagnostics">Apollo Health (Diagnostic Model)</option>
+            <option value="Apollo-Health-Diagnostics">Apollo Health (Diagnostics)</option>
           </select>
         </div>
       </div>
 
-      <!-- Dropzone -->
-      <div id="dropZone" onclick="document.getElementById('csvFileInput').click()" class="border-2 border-dashed border-slate-700/80 hover:border-cyan-400 rounded-2xl p-6 sm:p-10 text-center cursor-pointer transition bg-slate-950/40 hover:bg-slate-900/40 group">
+      <!-- Dropzone Mobile Optimized -->
+      <div id="dropZone" onclick="document.getElementById('csvFileInput').click()" class="border border-dashed border-slate-700 hover:border-cyan-400 rounded-xl p-5 text-center cursor-pointer bg-slate-950/60 transition">
         <input type="file" id="csvFileInput" accept=".csv" class="hidden">
-        <div class="h-14 w-14 mx-auto rounded-2xl bg-slate-900 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition border border-slate-800 shadow-inner">
-          <i class="fa-solid fa-file-csv text-2xl"></i>
+        <div class="h-11 w-11 mx-auto rounded-xl bg-slate-900 flex items-center justify-center text-cyan-400 border border-slate-800">
+          <i class="fa-solid fa-file-csv text-xl"></i>
         </div>
-        <div class="mt-3">
-          <p class="text-sm font-semibold text-white">Click or Drag & Drop Raw Training Data</p>
-          <p id="selectedFileLabel" class="text-xs text-cyan-400 font-mono mt-1">No file selected (Tap to browse)</p>
-        </div>
+        <p class="text-xs font-semibold text-white mt-2">Tap to Select CSV Dataset</p>
+        <p id="selectedFileLabel" class="text-[11px] text-cyan-400 font-mono mt-0.5 break-all">No file selected</p>
       </div>
 
-      <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-2">
-        <div class="text-xs text-slate-400 flex items-center gap-2">
-          <i class="fa-solid fa-microchip text-cyan-500"></i> Algorithm: Subspace Singular Value Decomposition ($V^T$)
-        </div>
-        <div class="flex gap-2 w-full sm:w-auto">
-          <button onclick="executeDefenseAudit()" id="auditBtn" class="w-full sm:w-auto bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-extrabold px-6 py-3 rounded-2xl text-sm transition shadow-lg shadow-cyan-500/25 flex items-center justify-center gap-2">
-            <i class="fa-solid fa-bolt"></i> Run Security Audit
-          </button>
-        </div>
+      <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2 pt-1">
+        <span class="text-[10px] text-slate-400 mono text-center sm:text-left">Engine: Subspace SVD Decomposition ($V^T$)</span>
+        <button onclick="executeDefenseAudit()" id="auditBtn" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-2.5 px-5 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow">
+          <i class="fa-solid fa-bolt"></i> Run Security Audit
+        </button>
       </div>
 
-      <div id="loadingBox" class="hidden pt-3 space-y-2">
-        <div class="flex justify-between text-xs mono text-cyan-400">
-          <span>RUNNING COVARIANCE SVD MATRIX...</span>
-          <span class="animate-pulse">ISOLATING BACKDOOR TRIGGERS</span>
+      <div id="loadingBox" class="hidden pt-2 space-y-1">
+        <div class="flex justify-between text-[11px] mono text-cyan-400">
+          <span>PROCESSING SVD MATRIX...</span>
+          <span class="animate-pulse">QUARANTINING</span>
         </div>
-        <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden p-0.5 border border-slate-800">
-          <div class="bg-gradient-to-r from-cyan-500 to-blue-500 h-full rounded-full w-2/3 animate-[pulse_1s_infinite]"></div>
+        <div class="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden border border-slate-800">
+          <div class="bg-cyan-400 h-full w-2/3 animate-[pulse_1s_infinite]"></div>
         </div>
       </div>
     </div>
 
-    <!-- Results Panel -->
-    <div id="resultsDashboard" class="hidden space-y-6">
+    <!-- Results SOC Panel -->
+    <div id="resultsDashboard" class="hidden space-y-4">
 
-      <!-- Executive KPI Cards -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <div class="glass-card p-4 rounded-2xl">
-          <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Evaluated</span>
-          <div id="valTotalRecords" class="text-2xl sm:text-3xl font-extrabold text-white mono mt-1">0</div>
-          <span class="text-[10px] text-slate-500 mt-1 block">Full Ingested Rows</span>
+      <!-- KPI Cards Mobile 2x2 Grid -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
+        <div class="glass-card p-3 rounded-xl">
+          <span class="text-[10px] text-slate-400 uppercase tracking-wide">Evaluated</span>
+          <div id="valTotalRecords" class="text-xl sm:text-2xl font-bold text-white mono mt-0.5">0</div>
+          <span class="text-[9px] text-slate-500">Total Rows</span>
         </div>
 
-        <div class="glass-card p-4 rounded-2xl border-red-500/30 bg-red-950/15 glow-danger">
-          <span class="text-[11px] font-semibold text-red-400 uppercase tracking-wider">Threats Purged</span>
-          <div id="valQuarantined" class="text-2xl sm:text-3xl font-extrabold text-red-400 mono mt-1">0</div>
-          <span class="text-[10px] text-red-400/70 mt-1 block">Poison Triggers Quarantined</span>
+        <div class="glass-card p-3 rounded-xl border-red-500/30 bg-red-950/20">
+          <span class="text-[10px] text-red-400 uppercase tracking-wide">Quarantined</span>
+          <div id="valQuarantined" class="text-xl sm:text-2xl font-bold text-red-400 mono mt-0.5">0</div>
+          <span class="text-[9px] text-red-400/80">Poison Rows</span>
         </div>
 
-        <div class="glass-card p-4 rounded-2xl border-emerald-500/30 bg-emerald-950/15">
-          <span class="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider">Hygiene Integrity</span>
-          <div id="valHygiene" class="text-2xl sm:text-3xl font-extrabold text-emerald-400 mono mt-1">0%</div>
-          <span class="text-[10px] text-emerald-400/70 mt-1 block">Data Safety Purity</span>
+        <div class="glass-card p-3 rounded-xl border-emerald-500/30 bg-emerald-950/20">
+          <span class="text-[10px] text-emerald-400 uppercase tracking-wide">Hygiene</span>
+          <div id="valHygiene" class="text-xl sm:text-2xl font-bold text-emerald-400 mono mt-0.5">0%</div>
+          <span class="text-[9px] text-emerald-400/80">Purity Score</span>
         </div>
 
-        <div class="glass-card p-4 rounded-2xl border-cyan-500/30 bg-cyan-950/15">
-          <span class="text-[11px] font-semibold text-cyan-400 uppercase tracking-wider">Scan Latency</span>
-          <div id="valLatency" class="text-2xl sm:text-3xl font-extrabold text-cyan-400 mono mt-1">0ms</div>
-          <span class="text-[10px] text-cyan-400/70 mt-1 block">Real-time SVD Response</span>
+        <div class="glass-card p-3 rounded-xl border-cyan-500/30 bg-cyan-950/20">
+          <span class="text-[10px] text-cyan-400 uppercase tracking-wide">Latency</span>
+          <div id="valLatency" class="text-xl sm:text-2xl font-bold text-cyan-400 mono mt-0.5">0ms</div>
+          <span class="text-[9px] text-cyan-400/80">Execution</span>
         </div>
       </div>
 
       <!-- Real-Time AI Threat Telemetry Charts -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="glass-card p-5 rounded-3xl flex flex-col justify-between">
-          <div class="flex justify-between items-center">
-            <h3 class="text-sm font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-chart-pie text-cyan-400"></i> Ingestion Purity
-            </h3>
-            <span class="text-[10px] mono text-slate-400">Telemetry Split</span>
-          </div>
-          <div class="w-44 sm:w-48 mx-auto my-4">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="glass-card p-4 rounded-2xl flex flex-col justify-between">
+          <h3 class="text-xs font-bold text-white mb-2 flex items-center gap-1.5">
+            <i class="fa-solid fa-chart-pie text-cyan-400"></i> Ingestion Purity
+          </h3>
+          <div class="w-36 sm:w-44 mx-auto my-2">
             <canvas id="purityChartCanvas"></canvas>
           </div>
-          <div class="flex justify-around text-xs mono text-slate-400 border-t border-slate-800/80 pt-3">
-            <span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-emerald-400"></span>Clean Data</span>
-            <span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-red-400"></span>Quarantined</span>
+          <div class="flex justify-around text-[10px] mono text-slate-400 border-t border-slate-800 pt-2">
+            <span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-emerald-400"></span>Clean</span>
+            <span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-red-400"></span>Threat</span>
           </div>
         </div>
 
-        <div class="glass-card p-5 rounded-3xl lg:col-span-2 flex flex-col justify-between">
-          <div class="flex justify-between items-center mb-2">
-            <h3 class="text-sm font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-chart-column text-cyan-400"></i> Eigenvector Outlier Energy Distribution
-            </h3>
-            <span class="text-[10px] mono text-cyan-400 bg-cyan-950 border border-cyan-800 px-2 py-0.5 rounded">Spectral Spike</span>
-          </div>
-          <p class="text-xs text-slate-400 mb-3">Isolated samples show acute variance along top singular vector $v_1$.</p>
-          <div class="h-56">
+        <div class="glass-card p-4 rounded-2xl lg:col-span-2 flex flex-col justify-between">
+          <h3 class="text-xs font-bold text-white mb-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-chart-column text-cyan-400"></i> Eigenvector Outlier Energy Distribution
+          </h3>
+          <p class="text-[10px] text-slate-400 mb-2">Isolated poisoned samples along top singular vector $v_1$.</p>
+          <div class="h-44 sm:h-52">
             <canvas id="energyChartCanvas"></canvas>
           </div>
         </div>
       </div>
 
-      <!-- Threat Quarantined Telemetry & Export Actions -->
-      <div class="glass-card p-5 sm:p-6 rounded-3xl space-y-4">
-        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3">
-          <div>
-            <h3 class="text-sm font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-shield-virus text-red-400"></i> Quarantined Threat Telemetry
-            </h3>
-            <p class="text-xs text-slate-400">Backdoor poisoned vectors segregated from training queue</p>
-          </div>
-          <div class="flex gap-2 flex-wrap">
-            <button onclick="downloadSanitizedCSV()" class="bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs transition flex items-center gap-2 shadow-sm">
-              <i class="fa-solid fa-file-circle-check"></i> Download Sanitized Dataset (.CSV)
+      <!-- Action Buttons & Threat Vectors -->
+      <div class="glass-card p-4 rounded-2xl space-y-3">
+        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+          <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+            <i class="fa-solid fa-shield-virus text-red-400"></i> Quarantined Threat Vectors
+          </h3>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <button onclick="downloadSanitizedCSV()" class="bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-file-circle-check"></i> Clean CSV
             </button>
-            <button onclick="exportAuditReport()" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-cyan-300 font-semibold px-4 py-2 rounded-xl text-xs transition flex items-center gap-2 shadow-sm">
-              <i class="fa-solid fa-download"></i> Export Audit Certificate (.JSON)
+            <button onclick="exportAuditReport()" class="bg-slate-900 border border-slate-700 text-cyan-300 font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-download"></i> Certificate (.JSON)
             </button>
           </div>
         </div>
-
-        <div id="quarantineTagsBox" class="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-3 bg-slate-950/60 rounded-2xl border border-slate-900"></div>
+        <div id="quarantineTagsBox" class="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-2 bg-slate-950 rounded-xl border border-slate-900"></div>
       </div>
 
     </div>
 
-    <!-- Enterprise Audit History Database Table -->
-    <div class="glass-card p-5 sm:p-6 rounded-3xl space-y-4">
+    <!-- Audit History Database Table -->
+    <div class="glass-card p-4 rounded-2xl space-y-3">
       <div class="flex justify-between items-center">
-        <div>
-          <h3 class="text-sm font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-database text-cyan-400"></i> Enterprise Audit Trail (Database Telemetry)
-          </h3>
-          <p class="text-xs text-slate-400">Persistent SQLite audit trail of all verified client datasets</p>
-        </div>
-        <button onclick="loadAuditHistory()" class="text-xs mono text-cyan-400 hover:underline">
-          <i class="fa-solid fa-arrows-rotate"></i> Refresh History
+        <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+          <i class="fa-solid fa-database text-cyan-400"></i> Audit History (SQLite)
+        </h3>
+        <button onclick="loadAuditHistory()" class="text-[10px] mono text-cyan-400 hover:underline">
+          <i class="fa-solid fa-arrows-rotate"></i> Refresh
         </button>
       </div>
 
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs mono text-slate-300">
-          <thead class="bg-slate-900/80 text-slate-400 border-b border-slate-800 uppercase">
+      <div class="overflow-x-auto -mx-1">
+        <table class="w-full text-left text-[11px] mono text-slate-300 min-w-[550px]">
+          <thead class="bg-slate-900/90 text-slate-400 border-b border-slate-800 uppercase text-[10px]">
             <tr>
-              <th class="py-2.5 px-3">Scan ID</th>
-              <th class="py-2.5 px-3">Tenant Client</th>
-              <th class="py-2.5 px-3">Dataset</th>
-              <th class="py-2.5 px-3">Rows</th>
-              <th class="py-2.5 px-3">Quarantined</th>
-              <th class="py-2.5 px-3">Hygiene</th>
-              <th class="py-2.5 px-3">Latency</th>
-              <th class="py-2.5 px-3">Timestamp</th>
+              <th class="p-2">Scan ID</th>
+              <th class="p-2">Tenant</th>
+              <th class="p-2">Rows</th>
+              <th class="p-2">Purged</th>
+              <th class="p-2">Hygiene</th>
+              <th class="p-2">Time</th>
             </tr>
           </thead>
-          <tbody id="historyTableBody" class="divide-y divide-slate-800/60">
+          <tbody id="historyTableBody" class="divide-y divide-slate-800">
             <tr>
-              <td colspan="8" class="text-center py-4 text-slate-500">No telemetry recorded yet. Run a scan above!</td>
+              <td colspan="6" class="text-center py-3 text-slate-500">No telemetry recorded yet.</td>
             </tr>
           </tbody>
         </table>
@@ -260,7 +235,7 @@
 
     document.getElementById('csvFileInput').addEventListener('change', function(e) {
       if (this.files[0]) {
-        document.getElementById('selectedFileLabel').innerText = `Loaded: ${this.files[0].name} (${Math.round(this.files[0].size/1024)} KB)`;
+        document.getElementById('selectedFileLabel').innerText = `${this.files[0].name} (${Math.round(this.files[0].size/1024)} KB)`;
       }
     });
 
@@ -296,8 +271,8 @@
         tagBox.innerHTML = '';
         data.quarantined_indices.forEach(idx => {
           const chip = document.createElement('span');
-          chip.className = 'bg-red-950/80 border border-red-800 text-red-300 px-2.5 py-1 rounded-lg text-xs mono font-semibold flex items-center gap-1.5';
-          chip.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-red-400 animate-ping"></span> Vector #${idx}`;
+          chip.className = 'bg-red-950/80 border border-red-800 text-red-300 px-2 py-0.5 rounded text-[10px] mono font-semibold';
+          chip.innerText = `#${idx}`;
           tagBox.appendChild(chip);
         });
 
@@ -311,11 +286,10 @@
             datasets: [{
               data: [cleanCount, data.quarantined_count],
               backgroundColor: ['#10b981', '#ef4444'],
-              borderWidth: 0,
-              hoverOffset: 6
+              borderWidth: 0
             }]
           },
-          options: { cutout: '72%', plugins: { legend: { display: false } } }
+          options: { cutout: '70%', plugins: { legend: { display: false } }, maintainAspectRatio: false }
         });
 
         if (energyChart) energyChart.destroy();
@@ -323,19 +297,19 @@
         energyChart = new Chart(ctxEnergy, {
           type: 'bar',
           data: {
-            labels: ['Low Energy (0-30%)', 'Nominal (30-60%)', 'High Energy (60-85%)', 'Anomalous Spike (>85%)'],
+            labels: ['Low', 'Nominal', 'Elevated', 'Poison Spike'],
             datasets: [
               {
-                label: 'Legitimate Feature Residuals',
+                label: 'Legitimate Residuals',
                 data: [cleanCount * 0.5, cleanCount * 0.35, cleanCount * 0.15, 0],
                 backgroundColor: '#06b6d4',
-                borderRadius: 6
+                borderRadius: 4
               },
               {
-                label: 'Adversarial Trigger Energy',
+                label: 'Trigger Energy',
                 data: [0, 0, data.quarantined_count * 0.2, data.quarantined_count * 0.8],
                 backgroundColor: '#ef4444',
-                borderRadius: 6
+                borderRadius: 4
               }
             ]
           },
@@ -343,11 +317,11 @@
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-              x: { grid: { color: '#0f172a' }, ticks: { color: '#94a3b8', font: { size: 10 } } },
-              y: { grid: { color: '#0f172a' }, ticks: { color: '#94a3b8', font: { size: 10 } } }
+              x: { grid: { color: '#0f172a' }, ticks: { color: '#94a3b8', font: { size: 9 } } },
+              y: { grid: { color: '#0f172a' }, ticks: { color: '#94a3b8', font: { size: 9 } } }
             },
             plugins: {
-              legend: { labels: { color: '#cbd5e1', font: { size: 11, family: 'JetBrains Mono' } } }
+              legend: { labels: { color: '#cbd5e1', font: { size: 10, family: 'JetBrains Mono' } } }
             }
           }
         });
@@ -355,7 +329,7 @@
         document.getElementById('resultsDashboard').classList.remove('hidden');
         loadAuditHistory();
       } catch (err) {
-        alert("Defense Pipeline Error: " + err);
+        alert("Pipeline Error: " + err);
       } finally {
         document.getElementById('loadingBox').classList.add('hidden');
         document.getElementById('auditBtn').disabled = false;
@@ -390,14 +364,12 @@
           const tr = document.createElement('tr');
           tr.className = 'hover:bg-slate-900/50';
           tr.innerHTML = `
-            <td class="py-2 px-3 text-cyan-400 font-semibold">${r.scan_id}</td>
-            <td class="py-2 px-3 text-white">${r.tenant}</td>
-            <td class="py-2 px-3 text-slate-400">${r.dataset}</td>
-            <td class="py-2 px-3">${r.records}</td>
-            <td class="py-2 px-3 text-red-400 font-bold">${r.quarantined}</td>
-            <td class="py-2 px-3 text-emerald-400">${r.hygiene}</td>
-            <td class="py-2 px-3 text-slate-400">${r.latency}</td>
-            <td class="py-2 px-3 text-slate-500">${r.timestamp}</td>
+            <td class="p-2 text-cyan-400 font-semibold">${r.scan_id.substring(0, 12)}...</td>
+            <td class="p-2 text-white truncate max-w-[120px]">${r.tenant}</td>
+            <td class="p-2">${r.records}</td>
+            <td class="p-2 text-red-400 font-bold">${r.quarantined}</td>
+            <td class="p-2 text-emerald-400">${r.hygiene}</td>
+            <td class="p-2 text-slate-500">${r.timestamp.split(' ')[1]}</td>
           `;
           tbody.appendChild(tr);
         });
@@ -411,7 +383,7 @@
       const jsonContent = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(lastAuditData, null, 2));
       const anchor = document.createElement('a');
       anchor.setAttribute("href", jsonContent);
-      anchor.setAttribute("download", `audit_certificate_${lastAuditData.scan_id}.json`);
+      anchor.setAttribute("download", `audit_${lastAuditData.scan_id}.json`);
       document.body.appendChild(anchor);
       anchor.click();
       anchor.remove();
