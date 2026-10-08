@@ -7,9 +7,9 @@ from scipy.linalg import svd
 import io
 import os
 
-app = FastAPI(title="AI Poisoning Defense Platform")
+app = FastAPI(title="SpectralShield AI Defense Platform")
 
-# Static files mount karo
+# Agar static folder ho toh mount karo, warna root se serve karo
 if os.path.exists("static"):
     app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -32,10 +32,23 @@ def run_spectral_defense(X, y, target_class=0, clean_ratio=0.08):
     
     return sanitized_indices, quarantined_indices
 
-# Home route par HTML file render hogi
 @app.get("/")
 def home():
+    if os.path.exists("index.html"):
+        return FileResponse("index.html")
     return FileResponse("static/index.html")
+
+@app.get("/manifest.json")
+def get_manifest():
+    if os.path.exists("manifest.json"):
+        return FileResponse("manifest.json")
+    return FileResponse("static/manifest.json")
+
+@app.get("/sw.js")
+def get_sw():
+    if os.path.exists("sw.js"):
+        return FileResponse("sw.js")
+    return FileResponse("static/sw.js")
 
 @app.post("/audit-csv")
 async def audit_dataset(file: UploadFile = File(...)):
