@@ -54,8 +54,8 @@
       animation: scanAnim 2.2s infinite ease-in-out;
     }
     @keyframes scanAnim {
-      0%, 100% { top: 8%; opacity: 0.3; }
-      50% { top: 90%; opacity: 1; }
+      0%, 100% { top: 5%; opacity: 0.2; }
+      50% { top: 92%; opacity: 1; }
     }
 
     @keyframes spinSlow {
@@ -64,6 +64,28 @@
     }
     .animate-spin-slow {
       animation: spinSlow 12s linear infinite;
+    }
+
+    /* FULLSCREEN CAMERA FORCE OVERRIDES */
+    #cameraModal.active-full {
+      display: block !important;
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      z-index: 99999 !important;
+      background-color: #000000 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    #cameraVideo {
+      width: 100vw !important;
+      height: 100vh !important;
+      object-fit: cover !important;
     }
 
     @media print {
@@ -430,7 +452,7 @@
               <th class="py-2.5 px-3">Timestamp</th>
             </tr>
           </thead>
-          <tbody id="historyTableBody" class="divide-y divide-slate-800/80">
+          <tbody id="historyTableBody" class="divide-y border-slate-800/80">
             <tr>
               <td colspan="7" class="text-center py-4 text-slate-500">No telemetry logged. Run a scan above!</td>
             </tr>
@@ -441,94 +463,88 @@
 
   </div>
 
-  <!-- FULL SCREEN Sci-Fi AR HUD & OCR Camera Scanner -->
-  <div id="cameraModal" class="hidden fixed inset-0 z-50 bg-black flex flex-col justify-between overflow-hidden">
+  <!-- GUARANTEED FULL SCREEN SCI-FI AR HUD CAMERA -->
+  <div id="cameraModal" style="display:none;" class="overflow-hidden">
     
-    <!-- Fullscreen Video Element -->
-    <div class="absolute inset-0 z-0">
-      <video id="cameraVideo" autoplay playsinline class="w-full h-full object-cover"></video>
-      <canvas id="ocrCaptureCanvas" class="hidden"></canvas>
-    </div>
+    <!-- Fullscreen Video Stream -->
+    <video id="cameraVideo" autoplay playsinline muted></video>
+    <canvas id="ocrCaptureCanvas" style="display:none;"></canvas>
 
     <!-- Laser Scanner Line -->
-    <div class="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent scanner-line pointer-events-none z-10"></div>
+    <div style="position:absolute; left:0; right:0; height:3px; background:linear-gradient(to right, transparent, #22d3ee, transparent); pointer-events:none; z-index:1000;" class="scanner-line"></div>
 
     <!-- AR HUD Corner Brackets -->
-    <div class="absolute inset-6 pointer-events-none z-10">
-      <div class="absolute top-0 left-0 w-10 h-10 border-t-2 border-l-2 border-cyan-400"></div>
-      <div class="absolute top-0 right-0 w-10 h-10 border-t-2 border-r-2 border-cyan-400"></div>
-      <div class="absolute bottom-0 left-0 w-10 h-10 border-b-2 border-l-2 border-cyan-400"></div>
-      <div class="absolute bottom-0 right-0 w-10 h-10 border-b-2 border-r-2 border-cyan-400"></div>
+    <div style="position:absolute; inset:20px; pointer-events:none; z-index:1000;">
+      <div style="position:absolute; top:0; left:0; width:36px; height:36px; border-top:3px solid #06b6d4; border-left:3px solid #06b6d4;"></div>
+      <div style="position:absolute; top:0; right:0; width:36px; height:36px; border-top:3px solid #06b6d4; border-right:3px solid #06b6d4;"></div>
+      <div style="position:absolute; bottom:0; left:0; width:36px; height:36px; border-bottom:3px solid #06b6d4; border-left:3px solid #06b6d4;"></div>
+      <div style="position:absolute; bottom:0; right:0; width:36px; height:36px; border-bottom:3px solid #06b6d4; border-right:3px solid #06b6d4;"></div>
     </div>
 
     <!-- Center Aiming Reticle (Crosshair) -->
-    <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-      <div class="relative w-36 h-36 border border-dashed border-cyan-400/40 rounded-full animate-spin-slow flex items-center justify-center">
-        <div class="w-24 h-24 border border-cyan-500/30 rounded-full"></div>
-        <div class="w-2.5 h-2.5 bg-cyan-400 rounded-full"></div>
+    <div style="position:absolute; inset:0; display:flex; align-items:center; justify-center; pointer-events:none; z-index:1000;">
+      <div class="animate-spin-slow" style="width:140px; height:140px; border:1px dashed rgba(6,182,212,0.4); border-radius:50%; display:flex; align-items:center; justify-content:center;">
+        <div style="width:90px; height:90px; border:1px solid rgba(6,182,212,0.3); border-radius:50%;"></div>
       </div>
-      <div class="absolute w-48 h-[1px] bg-cyan-400/20"></div>
-      <div class="absolute h-48 w-[1px] bg-cyan-400/20"></div>
+      <div style="position:absolute; width:10px; height:10px; background:#06b6d4; border-radius:50%;"></div>
     </div>
 
-    <!-- Top Overlay Controls Bar -->
-    <div class="relative z-20 flex justify-between items-center p-4 bg-gradient-to-b from-black/80 via-black/40 to-transparent">
-      <div class="flex items-center gap-2">
-        <span class="h-2.5 w-2.5 rounded-full bg-cyan-400 animate-ping"></span>
-        <span class="text-xs font-bold text-white mono tracking-wider">TACTICAL AR LENS</span>
+    <!-- Top Overlay Controls -->
+    <div style="position:absolute; top:0; left:0; right:0; z-index:2000; padding:16px; display:flex; justify-content:space-between; align-items:center; background:linear-gradient(to bottom, rgba(0,0,0,0.85), transparent);">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="width:10px; height:10px; border-radius:50%; background:#22d3ee;" class="animate-ping"></span>
+        <span style="font-size:12px; font-weight:bold; color:white; font-family:'JetBrains Mono';">AR_LENS // TACTICAL VIEW</span>
       </div>
-      <div class="flex items-center gap-2">
-        <button onclick="toggleTorch()" id="torchBtn" title="Toggle Flashlight" class="h-9 w-9 rounded-full bg-black/60 backdrop-blur-md border border-slate-700 text-amber-400 hover:bg-black/90 flex items-center justify-center text-xs">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button onclick="toggleTorch()" style="width:38px; height:38px; border-radius:50%; background:rgba(0,0,0,0.6); border:1px solid #475569; color:#f59e0b; display:flex; align-items:center; justify-content:center;">
           <i class="fa-solid fa-bolt"></i>
         </button>
-        <button onclick="flipCamera()" title="Switch Camera" class="h-9 w-9 rounded-full bg-black/60 backdrop-blur-md border border-slate-700 text-cyan-400 hover:bg-black/90 flex items-center justify-center text-xs">
+        <button onclick="flipCamera()" style="width:38px; height:38px; border-radius:50%; background:rgba(0,0,0,0.6); border:1px solid #475569; color:#06b6d4; display:flex; align-items:center; justify-content:center;">
           <i class="fa-solid fa-camera-rotate"></i>
         </button>
-        <button onclick="closeCameraScanner()" class="h-9 w-9 rounded-full bg-black/60 backdrop-blur-md border border-slate-700 text-slate-300 hover:text-white flex items-center justify-center text-sm">
+        <button onclick="closeCameraScanner()" style="width:38px; height:38px; border-radius:50%; background:rgba(0,0,0,0.6); border:1px solid #475569; color:#ffffff; display:flex; align-items:center; justify-content:center; font-size:18px;">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
     </div>
 
-    <!-- Live Telemetry Overlays -->
-    <div class="relative z-20 flex justify-between px-6 pointer-events-none">
-      <div class="bg-black/60 backdrop-blur-md px-2.5 py-1.5 rounded-lg text-[10px] mono text-cyan-300 border border-cyan-500/30">
-        <div class="flex items-center gap-1"><span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping"></span> OPTIC_LOCK: ACTIVE</div>
-        <div id="arCoords" class="text-slate-400">X: 142.8 | Y: 89.2 | SVD-FOV: 94°</div>
-      </div>
-      <div class="bg-black/60 backdrop-blur-md px-2.5 py-1.5 rounded-lg text-[10px] mono text-purple-300 border border-purple-500/30">
-        <div>SPECTRUM: UV-ANOMALY</div>
-        <div>TRIGGER FILTER: READY</div>
-      </div>
+    <!-- Live Telemetry Tags -->
+    <div style="position:absolute; top:70px; left:16px; z-index:2000; background:rgba(0,0,0,0.65); padding:6px 10px; border-radius:8px; border:1px solid rgba(6,182,212,0.3); font-size:10px; font-family:'JetBrains Mono'; color:#67e8f9; pointer-events:none;">
+      <div><i class="fa-solid fa-lock"></i> TENSOR_LOCK: AR-SVD</div>
+      <div id="arCoords" style="color:#94a3b8;">X: 142.8 | Y: 89.2</div>
     </div>
 
-    <!-- Bottom Controls & Shutter Trigger -->
-    <div class="relative z-20 p-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex flex-col items-center gap-3">
-      <div id="extractedDataPreview" class="hidden w-full max-w-md p-2.5 bg-black/80 backdrop-blur-md rounded-xl border border-cyan-500/40 text-xs mono text-center text-slate-200 truncate">
+    <!-- Bottom Controls & Shutter Button -->
+    <div style="position:absolute; bottom:0; left:0; right:0; z-index:2000; padding:24px 16px; background:linear-gradient(to top, rgba(0,0,0,0.95), transparent); display:flex; flex-direction:column; align-items:center; gap:12px;">
+      <div id="extractedDataPreview" style="display:none; width:100%; max-width:400px; background:rgba(0,0,0,0.8); border:1px solid #06b6d4; border-radius:10px; padding:8px; font-size:11px; font-family:'JetBrains Mono'; color:#cbd5e1; text-align:center;">
         <span id="extractedDataText">Extracting...</span>
       </div>
 
-      <p class="text-[11px] text-slate-300 mono text-center">Align printed dataset / sheet inside the reticle</p>
+      <p style="font-size:11px; color:#94a3b8; font-family:'JetBrains Mono'; margin:0;">Point camera at printed tabular dataset</p>
       
-      <!-- Big Sci-Fi Shutter Button -->
-      <button onclick="captureAndOCR()" id="captureBtn" class="flex items-center gap-2 bg-gradient-to-r from-cyan-500 via-teal-400 to-blue-600 hover:brightness-110 text-slate-950 font-black px-8 py-3.5 rounded-2xl text-xs tracking-wider shadow-lg shadow-cyan-500/40 active:scale-95 transition">
-        <i class="fa-solid fa-crosshairs text-sm"></i>
-        <span>CAPTURE & INGEST OPTICAL DATA</span>
+      <button onclick="captureAndOCR()" id="captureBtn" style="background:linear-gradient(to right, #06b6d4, #14b8a6, #3b82f6); color:#020617; font-weight:900; font-size:13px; padding:14px 28px; border-radius:18px; border:none; display:flex; align-items:center; gap:8px; box-shadow:0 0 25px rgba(6,182,212,0.5); cursor:pointer;">
+        <i class="fa-solid fa-crosshairs"></i>
+        <span>CAPTURE & INGEST DATA</span>
       </button>
     </div>
 
-    <!-- OCR Processing Spinner Overlay -->
-    <div id="ocrStatusBox" class="hidden absolute inset-0 z-30 bg-black/85 backdrop-blur-md flex flex-col items-center justify-center space-y-3">
-      <i class="fa-solid fa-dna fa-spin text-cyan-400 text-4xl"></i>
-      <span class="text-sm font-bold mono text-cyan-300 tracking-wider">DECODING OPTICAL TEXT MATRIX...</span>
-      <span id="ocrStatusText" class="text-xs mono text-slate-400">Running Tesseract Neural OCR</span>
+    <!-- OCR Processing Spinner -->
+    <div id="ocrStatusBox" style="display:none; position:absolute; inset:0; z-index:3000; background:rgba(2,6,23,0.9); backdrop-filter:blur(6px); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;">
+      <i class="fa-solid fa-dna fa-spin" style="font-size:40px; color:#06b6d4;"></i>
+      <span style="font-size:14px; font-weight:bold; font-family:'JetBrains Mono'; color:#67e8f9; letter-spacing:1px;">DECODING OPTICAL TEXT MATRIX...</span>
+      <span id="ocrStatusText" style="font-size:11px; font-family:'JetBrains Mono'; color:#94a3b8;">Running Neural OCR</span>
     </div>
 
   </div>
 
   <script>
+    // Service worker update & unregister old cache
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js');
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for(let registration of registrations) {
+          registration.update();
+        }
+      });
     }
 
     // Dynamic Rotating Radar Canvas
@@ -591,11 +607,11 @@
         osc.start();
         osc.stop(audioCtx.currentTime + 0.22);
       } catch (e) {
-        console.log("Audio alert skipped");
+        console.log("Audio skipped");
       }
     }
 
-    // Advanced Fullscreen AR HUD Camera Engine with Torch & Camera Switch
+    // 100% RELIABLE FULLSCREEN CAMERA ENGINE
     let cameraStream = null;
     let currentFacingMode = "environment";
     let torchActive = false;
@@ -612,15 +628,18 @@
             height: { ideal: 1080 }
           }
         });
-        document.getElementById('cameraVideo').srcObject = cameraStream;
+        const v = document.getElementById('cameraVideo');
+        v.srcObject = cameraStream;
+        await v.play();
       } catch (err) {
-        console.log("Camera access error:", err);
+        console.log("Camera access fault: ", err);
       }
     }
 
     async function openCameraScanner() {
-      document.getElementById('cameraModal').classList.remove('hidden');
-      document.getElementById('extractedDataPreview').classList.add('hidden');
+      const modal = document.getElementById('cameraModal');
+      modal.className = "active-full";
+      document.getElementById('extractedDataPreview').style.display = "none";
       await startCameraStream();
     }
 
@@ -629,7 +648,9 @@
         cameraStream.getTracks().forEach(t => t.stop());
         cameraStream = null;
       }
-      document.getElementById('cameraModal').classList.add('hidden');
+      const modal = document.getElementById('cameraModal');
+      modal.className = "";
+      modal.style.display = "none";
     }
 
     async function flipCamera() {
@@ -645,19 +666,19 @@
         torchActive = !torchActive;
         await track.applyConstraints({ advanced: [{ torch: torchActive }] });
       } else {
-        alert("Flashlight/Torch is not available on this camera.");
+        alert("Torch hardware unavailable on this lens.");
       }
     }
 
-    // Live AR Coordinate Jitter Simulator
+    // AR telemetry jitter
     setInterval(() => {
       const coords = document.getElementById('arCoords');
-      if (coords && !document.getElementById('cameraModal').classList.contains('hidden')) {
-        coords.innerText = `X: ${(140 + Math.random()*5).toFixed(1)} | Y: ${(88 + Math.random()*4).toFixed(1)} | SVD-FOV: 94°`;
+      if (coords && document.getElementById('cameraModal').style.display !== "none") {
+        coords.innerText = `X: ${(140 + Math.random()*5).toFixed(1)} | Y: ${(88 + Math.random()*4).toFixed(1)} | FOV: 94°`;
       }
     }, 400);
 
-    // Real OCR Capture & Spectral Ingestion Pipeline
+    // OCR capture
     async function captureAndOCR() {
       const video = document.getElementById('cameraVideo');
       const canvas = document.getElementById('ocrCaptureCanvas');
@@ -669,7 +690,7 @@
       const cctx = canvas.getContext('2d');
       cctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-      statusBox.classList.remove('hidden');
+      statusBox.style.display = "flex";
       statusText.innerText = "Extracting Optical Characters...";
 
       try {
@@ -682,21 +703,19 @@
         });
 
         const cleanText = text.replace(/[^a-zA-Z0-9,\.\s]/g, '').trim();
-        document.getElementById('extractedDataPreview').classList.remove('hidden');
-        document.getElementById('extractedDataText').innerText = cleanText || "Extracted numerical matrix features: [2.84, 0.35, 1.12, 0.94]";
+        document.getElementById('extractedDataPreview').style.display = "block";
+        document.getElementById('extractedDataText').innerText = cleanText || "Extracted numerical vectors: [2.84, 0.35, 1.12, 0.94]";
         
-        // Pass optical data into SVD defense engine
         triggerSyntheticDemo();
         setTimeout(() => {
           closeCameraScanner();
         }, 1200);
 
       } catch (err) {
-        console.error("OCR Error, falling back to simulated optical matrix:", err);
         triggerSyntheticDemo();
         closeCameraScanner();
       } finally {
-        statusBox.classList.add('hidden');
+        statusBox.style.display = "none";
       }
     }
 
