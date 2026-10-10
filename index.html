@@ -54,8 +54,8 @@
       animation: scanAnim 2.2s infinite ease-in-out;
     }
     @keyframes scanAnim {
-      0%, 100% { top: 6%; opacity: 0.3; }
-      50% { top: 92%; opacity: 1; }
+      0%, 100% { top: 8%; opacity: 0.3; }
+      50% { top: 90%; opacity: 1; }
     }
 
     @keyframes spinSlow {
@@ -441,96 +441,89 @@
 
   </div>
 
-  <!-- Ultra-Advance Sci-Fi AR HUD & OCR Camera Scanner Modal -->
-  <div id="cameraModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
-    <div class="cyber-card w-full max-w-xl p-4 sm:p-5 rounded-3xl space-y-3 neon-border relative overflow-hidden shadow-2xl">
-      
-      <!-- Modal Header -->
-      <div class="flex justify-between items-center pb-2 border-b border-slate-800">
-        <div class="flex items-center gap-2">
-          <span class="h-2.5 w-2.5 rounded-full bg-cyan-400 animate-ping"></span>
-          <h3 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2 display-font">
-            <i class="fa-solid fa-crosshairs text-cyan-400"></i> Tactical OCR & Anomaly AR Lens
-          </h3>
-        </div>
-        <div class="flex items-center gap-2">
-          <button onclick="toggleTorch()" id="torchBtn" title="Toggle Flashlight" class="h-8 w-8 rounded-xl bg-slate-900 border border-slate-700 text-amber-400 hover:bg-slate-800 flex items-center justify-center text-xs">
-            <i class="fa-solid fa-bolt"></i>
-          </button>
-          <button onclick="flipCamera()" title="Switch Camera" class="h-8 w-8 rounded-xl bg-slate-900 border border-slate-700 text-cyan-400 hover:bg-slate-800 flex items-center justify-center text-xs">
-            <i class="fa-solid fa-camera-rotate"></i>
-          </button>
-          <button onclick="closeCameraScanner()" class="h-8 w-8 rounded-xl bg-slate-900 border border-slate-700 text-slate-400 hover:text-white flex items-center justify-center text-sm">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
+  <!-- FULL SCREEN Sci-Fi AR HUD & OCR Camera Scanner -->
+  <div id="cameraModal" class="hidden fixed inset-0 z-50 bg-black flex flex-col justify-between overflow-hidden">
+    
+    <!-- Fullscreen Video Element -->
+    <div class="absolute inset-0 z-0">
+      <video id="cameraVideo" autoplay playsinline class="w-full h-full object-cover"></video>
+      <canvas id="ocrCaptureCanvas" class="hidden"></canvas>
+    </div>
+
+    <!-- Laser Scanner Line -->
+    <div class="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent scanner-line pointer-events-none z-10"></div>
+
+    <!-- AR HUD Corner Brackets -->
+    <div class="absolute inset-6 pointer-events-none z-10">
+      <div class="absolute top-0 left-0 w-10 h-10 border-t-2 border-l-2 border-cyan-400"></div>
+      <div class="absolute top-0 right-0 w-10 h-10 border-t-2 border-r-2 border-cyan-400"></div>
+      <div class="absolute bottom-0 left-0 w-10 h-10 border-b-2 border-l-2 border-cyan-400"></div>
+      <div class="absolute bottom-0 right-0 w-10 h-10 border-b-2 border-r-2 border-cyan-400"></div>
+    </div>
+
+    <!-- Center Aiming Reticle (Crosshair) -->
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+      <div class="relative w-36 h-36 border border-dashed border-cyan-400/40 rounded-full animate-spin-slow flex items-center justify-center">
+        <div class="w-24 h-24 border border-cyan-500/30 rounded-full"></div>
+        <div class="w-2.5 h-2.5 bg-cyan-400 rounded-full"></div>
       </div>
+      <div class="absolute w-48 h-[1px] bg-cyan-400/20"></div>
+      <div class="absolute h-48 w-[1px] bg-cyan-400/20"></div>
+    </div>
 
-      <!-- Live Video Feed Container with Sci-Fi AR HUD -->
-      <div class="relative w-full h-72 sm:h-80 bg-slate-950 rounded-2xl overflow-hidden border border-cyan-500/40 flex items-center justify-center">
-        <video id="cameraVideo" autoplay playsinline class="w-full h-full object-cover"></video>
-        <canvas id="ocrCaptureCanvas" class="hidden"></canvas>
-
-        <!-- Moving Laser Bar -->
-        <div class="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent scanner-line pointer-events-none"></div>
-
-        <!-- AR HUD Corner Brackets -->
-        <div class="absolute inset-4 pointer-events-none">
-          <div class="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-cyan-400"></div>
-          <div class="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-cyan-400"></div>
-          <div class="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-cyan-400"></div>
-          <div class="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-cyan-400"></div>
-        </div>
-
-        <!-- Center Aiming Reticle (Crosshair) -->
-        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div class="relative w-28 h-28 border border-dashed border-cyan-400/40 rounded-full animate-spin-slow flex items-center justify-center">
-            <div class="w-20 h-20 border border-cyan-500/30 rounded-full"></div>
-            <div class="w-2 h-2 bg-cyan-400 rounded-full"></div>
-          </div>
-          <div class="absolute w-36 h-[1px] bg-cyan-400/20"></div>
-          <div class="absolute h-36 w-[1px] bg-cyan-400/20"></div>
-        </div>
-
-        <!-- Live AR Data Telemetry Tagging (Top Left & Bottom Right) -->
-        <div class="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-md text-[9px] mono text-cyan-300 border border-cyan-500/30">
-          <div class="flex items-center gap-1"><span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping"></span> OPTIC_LOCK: ACTIVE</div>
-          <div id="arCoords" class="text-slate-400">X: 142.8 | Y: 89.2 | SVD-FOV: 94°</div>
-        </div>
-
-        <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-md text-[9px] mono text-purple-300 border border-purple-500/30">
-          <div>SPECTRUM: UV-ANOMALY</div>
-          <div>TRIGGER FILTER: READY</div>
-        </div>
-
-        <!-- OCR Scanning Status Overlay -->
-        <div id="ocrStatusBox" class="hidden absolute inset-0 bg-slate-950/80 backdrop-blur-sm flex flex-col items-center justify-center space-y-2">
-          <i class="fa-solid fa-dna fa-spin text-cyan-400 text-3xl"></i>
-          <span class="text-xs font-bold mono text-cyan-300 tracking-wider">DECODING OPTICAL TEXT MATRIX...</span>
-          <span id="ocrStatusText" class="text-[10px] mono text-slate-400">Running Tesseract Neural OCR</span>
-        </div>
+    <!-- Top Overlay Controls Bar -->
+    <div class="relative z-20 flex justify-between items-center p-4 bg-gradient-to-b from-black/80 via-black/40 to-transparent">
+      <div class="flex items-center gap-2">
+        <span class="h-2.5 w-2.5 rounded-full bg-cyan-400 animate-ping"></span>
+        <span class="text-xs font-bold text-white mono tracking-wider">TACTICAL AR LENS</span>
       </div>
-
-      <!-- Extracted OCR Text Preview Box -->
-      <div id="extractedDataPreview" class="hidden p-2.5 bg-slate-950/90 rounded-xl border border-cyan-500/30 text-xs mono space-y-1">
-        <div class="text-[10px] text-cyan-400 font-bold uppercase flex items-center gap-1.5">
-          <i class="fa-solid fa-file-lines"></i> Extracted Training Tokens:
-        </div>
-        <p id="extractedDataText" class="text-[11px] text-slate-300 truncate font-mono"></p>
-      </div>
-
-      <!-- Action Footer -->
-      <div class="flex flex-col sm:flex-row justify-between items-center gap-2 pt-1">
-        <span class="text-[10px] text-slate-400 mono text-center sm:text-left">
-          Align document / printed dataset inside reticle
-        </span>
-        <button onclick="captureAndOCR()" id="captureBtn" class="w-full sm:w-auto bg-gradient-to-r from-cyan-500 via-teal-400 to-blue-600 hover:brightness-110 text-slate-950 font-extrabold px-5 py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/25 active:scale-95 transition">
-          <i class="fa-solid fa-camera-retro"></i>
-          <span>Capture & Ingest Optical Data</span>
+      <div class="flex items-center gap-2">
+        <button onclick="toggleTorch()" id="torchBtn" title="Toggle Flashlight" class="h-9 w-9 rounded-full bg-black/60 backdrop-blur-md border border-slate-700 text-amber-400 hover:bg-black/90 flex items-center justify-center text-xs">
+          <i class="fa-solid fa-bolt"></i>
+        </button>
+        <button onclick="flipCamera()" title="Switch Camera" class="h-9 w-9 rounded-full bg-black/60 backdrop-blur-md border border-slate-700 text-cyan-400 hover:bg-black/90 flex items-center justify-center text-xs">
+          <i class="fa-solid fa-camera-rotate"></i>
+        </button>
+        <button onclick="closeCameraScanner()" class="h-9 w-9 rounded-full bg-black/60 backdrop-blur-md border border-slate-700 text-slate-300 hover:text-white flex items-center justify-center text-sm">
+          <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
-
     </div>
+
+    <!-- Live Telemetry Overlays -->
+    <div class="relative z-20 flex justify-between px-6 pointer-events-none">
+      <div class="bg-black/60 backdrop-blur-md px-2.5 py-1.5 rounded-lg text-[10px] mono text-cyan-300 border border-cyan-500/30">
+        <div class="flex items-center gap-1"><span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping"></span> OPTIC_LOCK: ACTIVE</div>
+        <div id="arCoords" class="text-slate-400">X: 142.8 | Y: 89.2 | SVD-FOV: 94°</div>
+      </div>
+      <div class="bg-black/60 backdrop-blur-md px-2.5 py-1.5 rounded-lg text-[10px] mono text-purple-300 border border-purple-500/30">
+        <div>SPECTRUM: UV-ANOMALY</div>
+        <div>TRIGGER FILTER: READY</div>
+      </div>
+    </div>
+
+    <!-- Bottom Controls & Shutter Trigger -->
+    <div class="relative z-20 p-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex flex-col items-center gap-3">
+      <div id="extractedDataPreview" class="hidden w-full max-w-md p-2.5 bg-black/80 backdrop-blur-md rounded-xl border border-cyan-500/40 text-xs mono text-center text-slate-200 truncate">
+        <span id="extractedDataText">Extracting...</span>
+      </div>
+
+      <p class="text-[11px] text-slate-300 mono text-center">Align printed dataset / sheet inside the reticle</p>
+      
+      <!-- Big Sci-Fi Shutter Button -->
+      <button onclick="captureAndOCR()" id="captureBtn" class="flex items-center gap-2 bg-gradient-to-r from-cyan-500 via-teal-400 to-blue-600 hover:brightness-110 text-slate-950 font-black px-8 py-3.5 rounded-2xl text-xs tracking-wider shadow-lg shadow-cyan-500/40 active:scale-95 transition">
+        <i class="fa-solid fa-crosshairs text-sm"></i>
+        <span>CAPTURE & INGEST OPTICAL DATA</span>
+      </button>
+    </div>
+
+    <!-- OCR Processing Spinner Overlay -->
+    <div id="ocrStatusBox" class="hidden absolute inset-0 z-30 bg-black/85 backdrop-blur-md flex flex-col items-center justify-center space-y-3">
+      <i class="fa-solid fa-dna fa-spin text-cyan-400 text-4xl"></i>
+      <span class="text-sm font-bold mono text-cyan-300 tracking-wider">DECODING OPTICAL TEXT MATRIX...</span>
+      <span id="ocrStatusText" class="text-xs mono text-slate-400">Running Tesseract Neural OCR</span>
+    </div>
+
   </div>
 
   <script>
@@ -602,7 +595,7 @@
       }
     }
 
-    // Advanced AR HUD Camera Engine with Torch & Camera Switch
+    // Advanced Fullscreen AR HUD Camera Engine with Torch & Camera Switch
     let cameraStream = null;
     let currentFacingMode = "environment";
     let torchActive = false;
@@ -615,8 +608,8 @@
         cameraStream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: currentFacingMode,
-            width: { ideal: 1280 },
-            height: { ideal: 720 }
+            width: { ideal: 1920 },
+            height: { ideal: 1080 }
           }
         });
         document.getElementById('cameraVideo').srcObject = cameraStream;
