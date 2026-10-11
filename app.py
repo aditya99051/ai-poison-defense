@@ -73,8 +73,8 @@ def compute_spectral_decomposition(X, y, target_class=0, clean_ratio=0.08):
     k = max(1, int(len(class_indices) * clean_ratio))
     quarantined_subset = np.argsort(scores)[::-1][:k]
 
-    quarantined_indices = class_indices[quarantined_subset].tolist()
-    sanitized_indices = np.setdiff1d(np.arange(len(X)), quarantined_indices).tolist()
+    quarantined_indices = [int(i) for i in class_indices[quarantined_subset].tolist()]
+    sanitized_indices = [int(i) for i in np.setdiff1d(np.arange(len(X)), quarantined_indices).tolist()]
 
     return sanitized_indices, quarantined_indices
 
@@ -150,18 +150,18 @@ def get_audit_history(limit: int = Query(5, ge=1, le=20)):
         history = []
         for r in rows:
             history.append({
-                "scan_id": r[0],
-                "tenant": r[1],
-                "dataset": r[2],
-                "records": r[3],
-                "quarantined": r[4],
+                "scan_id": str(r[0]),
+                "tenant": str(r[1]),
+                "dataset": str(r[2]),
+                "records": int(r[3]),
+                "quarantined": int(r[4]),
                 "hygiene": f"{r[5]}%",
                 "latency": f"{r[6]}ms",
-                "timestamp": r[7],
-                "status": r[8]
+                "timestamp": str(r[7]),
+                "status": str(r[8])
             })
         return history
-    except Exception as e:
+    except Exception:
         return []
 
 @app.get("/api/v1/scan/generate-demo-attack")
@@ -183,10 +183,11 @@ def generate_demo_attack_telemetry():
         start_time = datetime.datetime.now()
         sanitized_idx, quarantined_idx = compute_spectral_decomposition(X, y, clean_ratio=0.08)
         
-        total = len(X)
-        clean_count = total - len(quarantined_idx)
-        hygiene_score = round((clean_count / total) * 100, 2)
-        latency_ms = int((datetime.datetime.now() - start_time).total_seconds() * 1000)
+        total = int(len(X))
+        quarantined_count = int(len(quarantined_idx))
+        clean_count = int(total - quarantined_count)
+        hygiene_score = float(round((clean_count / total) * 100, 2))
+        latency_ms = int(max(10, int((datetime.datetime.now() - start_time).total_seconds() * 1000)))
         
         scan_id = f"SPEC-GLOBAL-{datetime.datetime.now().strftime('%H%M%S')}"
 
@@ -200,7 +201,7 @@ def generate_demo_attack_telemetry():
                 "Global-Threat-Node",
                 "synthetic_backdoor_batch.csv",
                 total,
-                len(quarantined_idx),
+                quarantined_count,
                 hygiene_score,
                 latency_ms,
                 datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -209,16 +210,18 @@ def generate_demo_attack_telemetry():
             conn.commit()
             conn.close()
         except Exception as db_err:
-            print("DB Logging Warning:", db_err)
+            print("DB Logger Error:", db_err)
+
+        safe_quarantined_indices = [int(x) for x in quarantined_idx[:35]]
 
         return {
-            "scan_id": scan_id,
+            "scan_id": str(scan_id),
             "tenant_id": "Global-Threat-Node",
             "filename": "synthetic_backdoor_batch.csv",
             "total_records": total,
             "clean_records": clean_count,
-            "quarantined_count": len(quarantined_idx),
-            "quarantined_indices": quarantined_idx[:35],
+            "quarantined_count": quarantined_count,
+            "quarantined_indices": safe_quarantined_indices,
             "hygiene_score": f"{hygiene_score}%",
             "latency_ms": latency_ms,
             "research_metrics": {
@@ -231,7 +234,7 @@ def generate_demo_attack_telemetry():
             "status": "SUCCESSFUL"
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Simulation Error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Simulation Fault: {str(e)}")
 
 @app.post("/api/v1/scan/audit-csv")
 async def audit_dataset_enterprise(
@@ -252,11 +255,12 @@ async def audit_dataset_enterprise(
     X = df.iloc[:, :-1].values
     y = df.iloc[:, -1].values
 
-    total_records = len(df)
+    total_records = int(len(df))
     sanitized_idx, quarantined_idx = compute_spectral_decomposition(X, y)
 
-    clean_count = total_records - len(quarantined_idx)
-    hygiene_score = round((clean_count / total_records) * 100, 2)
+    quarantined_count = int(len(quarantined_idx))
+    clean_count = int(total_records - quarantined_count)
+    hygiene_score = float(round((clean_count / total_records) * 100, 2))
     latency_ms = int((datetime.datetime.now() - start_time).total_seconds() * 1000)
 
     scan_id = f"SPEC-{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}"
@@ -271,7 +275,7 @@ async def audit_dataset_enterprise(
             x_tenant_id,
             file.filename,
             total_records,
-            len(quarantined_idx),
+            quarantined_count,
             hygiene_score,
             latency_ms,
             datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -280,16 +284,18 @@ async def audit_dataset_enterprise(
         conn.commit()
         conn.close()
     except Exception as db_err:
-        print("DB Logging Warning:", db_err)
+        print("DB Logger Error:", db_err)
+
+    safe_quarantined_indices = [int(x) for x in quarantined_idx[:40]]
 
     return {
-        "scan_id": scan_id,
-        "tenant_id": x_tenant_id,
-        "filename": file.filename,
+        "scan_id": str(scan_id),
+        "tenant_id": str(x_tenant_id),
+        "filename": str(file.filename),
         "total_records": total_records,
         "clean_records": clean_count,
-        "quarantined_count": len(quarantined_idx),
-        "quarantined_indices": quarantined_idx[:40],
+        "quarantined_count": quarantined_count,
+        "quarantined_indices": safe_quarantined_indices,
         "hygiene_score": f"{hygiene_score}%",
         "latency_ms": latency_ms,
         "research_metrics": {
@@ -319,14 +325,15 @@ async def audit_dataset_from_url(payload: CloudScanRequest):
     X = df.iloc[:, :-1].values
     y = df.iloc[:, -1].values
 
-    total_records = len(df)
+    total_records = int(len(df))
     sanitized_idx, quarantined_idx = compute_spectral_decomposition(X, y)
 
-    clean_count = total_records - len(quarantined_idx)
-    hygiene_score = round((clean_count / total_records) * 100, 2)
+    quarantined_count = int(len(quarantined_idx))
+    clean_count = int(total_records - quarantined_count)
+    hygiene_score = float(round((clean_count / total_records) * 100, 2))
     latency_ms = int((datetime.datetime.now() - start_time).total_seconds() * 1000)
 
-    filename = payload.url.split("/")[-1] or "remote_cloud_data.csv"
+    filename = str(payload.url.split("/")[-1] or "remote_cloud_data.csv")
     scan_id = f"SPEC-CLOUD-{datetime.datetime.now().strftime('%H%M%S')}"
 
     try:
@@ -339,7 +346,7 @@ async def audit_dataset_from_url(payload: CloudScanRequest):
             payload.tenant_id,
             filename,
             total_records,
-            len(quarantined_idx),
+            quarantined_count,
             hygiene_score,
             latency_ms,
             datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -348,16 +355,18 @@ async def audit_dataset_from_url(payload: CloudScanRequest):
         conn.commit()
         conn.close()
     except Exception as db_err:
-        print("DB Logging Warning:", db_err)
+        print("DB Logger Error:", db_err)
+
+    safe_quarantined_indices = [int(x) for x in quarantined_idx[:40]]
 
     return {
-        "scan_id": scan_id,
-        "tenant_id": payload.tenant_id,
+        "scan_id": str(scan_id),
+        "tenant_id": str(payload.tenant_id),
         "filename": filename,
         "total_records": total_records,
         "clean_records": clean_count,
-        "quarantined_count": len(quarantined_idx),
-        "quarantined_indices": quarantined_idx[:40],
+        "quarantined_count": quarantined_count,
+        "quarantined_indices": safe_quarantined_indices,
         "hygiene_score": f"{hygiene_score}%",
         "latency_ms": latency_ms,
         "research_metrics": {
