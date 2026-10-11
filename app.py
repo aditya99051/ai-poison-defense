@@ -137,92 +137,101 @@ def health_check():
 
 @app.get("/api/v1/telemetry/recent-audits")
 def get_audit_history(limit: int = Query(5, ge=1, le=20)):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        SELECT scan_id, tenant_name, filename, total_records, quarantined_count, hygiene_score, execution_latency_ms, timestamp, status
-        FROM scan_logs ORDER BY timestamp DESC LIMIT ?
-    """, (limit,))
-    rows = cursor.fetchall()
-    conn.close()
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT scan_id, tenant_name, filename, total_records, quarantined_count, hygiene_score, execution_latency_ms, timestamp, status
+            FROM scan_logs ORDER BY timestamp DESC LIMIT ?
+        """, (limit,))
+        rows = cursor.fetchall()
+        conn.close()
 
-    history = []
-    for r in rows:
-        history.append({
-            "scan_id": r[0],
-            "tenant": r[1],
-            "dataset": r[2],
-            "records": r[3],
-            "quarantined": r[4],
-            "hygiene": f"{r[5]}%",
-            "latency": f"{r[6]}ms",
-            "timestamp": r[7],
-            "status": r[8]
-        })
-    return history
+        history = []
+        for r in rows:
+            history.append({
+                "scan_id": r[0],
+                "tenant": r[1],
+                "dataset": r[2],
+                "records": r[3],
+                "quarantined": r[4],
+                "hygiene": f"{r[5]}%",
+                "latency": f"{r[6]}ms",
+                "timestamp": r[7],
+                "status": r[8]
+            })
+        return history
+    except Exception as e:
+        return []
 
 @app.get("/api/v1/scan/generate-demo-attack")
 def generate_demo_attack_telemetry():
-    np.random.seed(42)
-    n_clean = 920
-    n_poison = 80
-    
-    X_clean = np.random.normal(loc=0.0, scale=1.0, size=(n_clean, 4))
-    y_clean = np.zeros(n_clean)
-    
-    X_poison = np.random.normal(loc=2.8, scale=0.35, size=(n_poison, 4))
-    y_poison = np.zeros(n_poison)
-    
-    X = np.vstack([X_clean, X_poison])
-    y = np.concatenate([y_clean, y_poison])
-    
-    start_time = datetime.datetime.now()
-    sanitized_idx, quarantined_idx = compute_spectral_decomposition(X, y, clean_ratio=0.08)
-    
-    total = len(X)
-    clean_count = total - len(quarantined_idx)
-    hygiene_score = round((clean_count / total) * 100, 2)
-    latency_ms = int((datetime.datetime.now() - start_time).total_seconds() * 1000)
-    
-    scan_id = f"SPEC-GLOBAL-{datetime.datetime.now().strftime('%H%M%S')}"
+    try:
+        np.random.seed(42)
+        n_clean = 920
+        n_poison = 80
+        
+        X_clean = np.random.normal(loc=0.0, scale=1.0, size=(n_clean, 4))
+        y_clean = np.zeros(n_clean)
+        
+        X_poison = np.random.normal(loc=2.8, scale=0.35, size=(n_poison, 4))
+        y_poison = np.zeros(n_poison)
+        
+        X = np.vstack([X_clean, X_poison])
+        y = np.concatenate([y_clean, y_poison])
+        
+        start_time = datetime.datetime.now()
+        sanitized_idx, quarantined_idx = compute_spectral_decomposition(X, y, clean_ratio=0.08)
+        
+        total = len(X)
+        clean_count = total - len(quarantined_idx)
+        hygiene_score = round((clean_count / total) * 100, 2)
+        latency_ms = int((datetime.datetime.now() - start_time).total_seconds() * 1000)
+        
+        scan_id = f"SPEC-GLOBAL-{datetime.datetime.now().strftime('%H%M%S')}"
 
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO scan_logs VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (
-        scan_id,
-        "Global-Threat-Node",
-        "synthetic_backdoor_batch.csv",
-        total,
-        len(quarantined_idx),
-        hygiene_score,
-        latency_ms,
-        datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "GLOBAL INTERCEPT SUCCESSFUL"
-    ))
-    conn.commit()
-    conn.close()
+        try:
+            conn = sqlite3.connect(DB_PATH)
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT OR REPLACE INTO scan_logs VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                scan_id,
+                "Global-Threat-Node",
+                "synthetic_backdoor_batch.csv",
+                total,
+                len(quarantined_idx),
+                hygiene_score,
+                latency_ms,
+                datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "GLOBAL INTERCEPT SUCCESSFUL"
+            ))
+            conn.commit()
+            conn.close()
+        except Exception as db_err:
+            print("DB Logging Warning:", db_err)
 
-    return {
-        "scan_id": scan_id,
-        "tenant_id": "Global-Threat-Node",
-        "filename": "synthetic_backdoor_batch.csv",
-        "total_records": total,
-        "clean_records": clean_count,
-        "quarantined_count": len(quarantined_idx),
-        "quarantined_indices": quarantined_idx[:35],
-        "hygiene_score": f"{hygiene_score}%",
-        "latency_ms": latency_ms,
-        "research_metrics": {
-            "attack_success_rate_before_defense": "94.2%",
-            "attack_success_rate_after_defense": "0.0%",
-            "model_clean_accuracy": "98.7%",
-            "spectral_eigen_energy_peak": "14.82"
-        },
-        "compliance": "PASSED (NIST-AI-RMF-1.0 / IEEE-P2807)",
-        "status": "SUCCESSFUL"
-    }
+        return {
+            "scan_id": scan_id,
+            "tenant_id": "Global-Threat-Node",
+            "filename": "synthetic_backdoor_batch.csv",
+            "total_records": total,
+            "clean_records": clean_count,
+            "quarantined_count": len(quarantined_idx),
+            "quarantined_indices": quarantined_idx[:35],
+            "hygiene_score": f"{hygiene_score}%",
+            "latency_ms": latency_ms,
+            "research_metrics": {
+                "attack_success_rate_before_defense": "94.2%",
+                "attack_success_rate_after_defense": "0.0%",
+                "model_clean_accuracy": "98.7%",
+                "spectral_eigen_energy_peak": "14.82"
+            },
+            "compliance": "PASSED (NIST-AI-RMF-1.0 / IEEE-P2807)",
+            "status": "SUCCESSFUL"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Simulation Error: {str(e)}")
 
 @app.post("/api/v1/scan/audit-csv")
 async def audit_dataset_enterprise(
@@ -252,23 +261,26 @@ async def audit_dataset_enterprise(
 
     scan_id = f"SPEC-{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}"
 
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO scan_logs VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (
-        scan_id,
-        x_tenant_id,
-        file.filename,
-        total_records,
-        len(quarantined_idx),
-        hygiene_score,
-        latency_ms,
-        datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "QUARANTINED & SANITIZED"
-    ))
-    conn.commit()
-    conn.close()
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT OR REPLACE INTO scan_logs VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            scan_id,
+            x_tenant_id,
+            file.filename,
+            total_records,
+            len(quarantined_idx),
+            hygiene_score,
+            latency_ms,
+            datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "QUARANTINED & SANITIZED"
+        ))
+        conn.commit()
+        conn.close()
+    except Exception as db_err:
+        print("DB Logging Warning:", db_err)
 
     return {
         "scan_id": scan_id,
@@ -317,23 +329,26 @@ async def audit_dataset_from_url(payload: CloudScanRequest):
     filename = payload.url.split("/")[-1] or "remote_cloud_data.csv"
     scan_id = f"SPEC-CLOUD-{datetime.datetime.now().strftime('%H%M%S')}"
 
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO scan_logs VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (
-        scan_id,
-        payload.tenant_id,
-        filename,
-        total_records,
-        len(quarantined_idx),
-        hygiene_score,
-        latency_ms,
-        datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "CLOUD INGEST COMPLETE"
-    ))
-    conn.commit()
-    conn.close()
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT OR REPLACE INTO scan_logs VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            scan_id,
+            payload.tenant_id,
+            filename,
+            total_records,
+            len(quarantined_idx),
+            hygiene_score,
+            latency_ms,
+            datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "CLOUD INGEST COMPLETE"
+        ))
+        conn.commit()
+        conn.close()
+    except Exception as db_err:
+        print("DB Logging Warning:", db_err)
 
     return {
         "scan_id": scan_id,
