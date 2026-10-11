@@ -91,7 +91,7 @@
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[380px] bg-gradient-to-b from-cyan-600/15 via-blue-600/5 to-transparent blur-3xl pointer-events-none"></div>
   </div>
 
-  <!-- ULTRA-WIDE FULL SCREEN WRAPPER (No max-w limit) -->
+  <!-- Ultra Wide Layout -->
   <div class="relative z-10 w-full px-3 sm:px-6 lg:px-8 py-3 sm:py-5 space-y-4">
 
     <!-- Global Threat Intelligence Live Ticker -->
@@ -133,7 +133,7 @@
         </div>
       </div>
 
-      <!-- Action Tools (Includes Edge Fullscreen Toggle) -->
+      <!-- Action Tools -->
       <div class="flex items-center gap-2 w-full md:w-auto justify-end flex-wrap">
         <button onclick="toggleWebFullscreen()" id="fsToggleBtn" title="Toggle App Fullscreen" class="bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-cyan-500/40 px-3 py-2 rounded-xl text-xs mono flex items-center gap-1.5 transition">
           <i class="fa-solid fa-expand" id="fsIcon"></i>
@@ -157,7 +157,7 @@
       </div>
     </header>
 
-    <!-- World Threat Node Matrix Map (Ultra Wide) -->
+    <!-- World Threat Node Matrix Map -->
     <div class="cyber-card p-4 sm:p-5 rounded-3xl space-y-3">
       <div class="flex justify-between items-center">
         <div>
@@ -203,7 +203,7 @@
       </div>
     </div>
 
-    <!-- Ingestion Engine (Ultra Wide) -->
+    <!-- Ingestion Engine -->
     <div class="cyber-card p-4 sm:p-6 rounded-3xl ingest-box space-y-4 relative overflow-hidden">
       <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 pb-2 border-b border-slate-800/80">
         <div>
@@ -242,7 +242,7 @@
         <div class="flex-grow border-t border-slate-800"></div>
       </div>
 
-      <!-- Dropzone (Full Width Responsive) -->
+      <!-- Dropzone -->
       <div id="dropZone" onclick="document.getElementById('csvFileInput').click()" class="border-2 border-dashed border-cyan-500/30 hover:border-cyan-400 rounded-2xl p-7 sm:p-9 text-center cursor-pointer bg-slate-950/40 hover:bg-slate-900/40 transition group relative">
         <input type="file" id="csvFileInput" accept=".csv" class="hidden">
         <div class="h-14 w-14 mx-auto rounded-2xl bg-gradient-to-b from-slate-900 to-[#070f26] border border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:scale-110 group-hover:border-cyan-400 transition shadow-inner">
@@ -276,7 +276,7 @@
     <!-- Active Results Panel -->
     <div id="resultsDashboard" class="hidden space-y-4 sm:space-y-6">
 
-      <!-- Model Passport Cryptographic Watermark -->
+      <!-- Model Passport Hash -->
       <div class="cyber-card p-4 rounded-2xl border-cyan-500/40 bg-slate-950/80 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
         <div class="flex items-center gap-3">
           <div class="h-10 w-10 rounded-xl bg-cyan-950 border border-cyan-700 flex items-center justify-center text-cyan-400 text-lg">
@@ -357,7 +357,7 @@
         </div>
       </div>
 
-      <!-- Charts (Flexible Grid) -->
+      <!-- Charts -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         <div class="cyber-card p-4 sm:p-5 rounded-3xl flex flex-col justify-between">
           <div class="flex justify-between items-center">
@@ -416,7 +416,7 @@
 
     </div>
 
-    <!-- Telemetry Audit Trail (Ultra Wide) -->
+    <!-- Telemetry Audit Trail -->
     <div class="cyber-card p-4 sm:p-6 rounded-3xl audit-history-box space-y-3">
       <div class="flex justify-between items-center">
         <div>
@@ -454,7 +454,7 @@
 
   </div>
 
-  <!-- TRUE FULLSCREEN HARDWARE AR HUD & OCR CAMERA LENS -->
+  <!-- Hardware Edge AR HUD & OCR Camera Modal -->
   <div id="cameraModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:#000; z-index:99999; margin:0; padding:0; overflow:hidden;">
     <video id="cameraVideo" autoplay playsinline muted style="position:fixed; top:0; left:0; width:100vw; height:100vh; object-fit:cover; z-index:1; margin:0; padding:0;"></video>
     <canvas id="ocrCaptureCanvas" style="display:none;"></canvas>
@@ -528,7 +528,7 @@
       });
     }
 
-    // Toggle Web App True Fullscreen Mode (Browser Bars Hide)
+    // Toggle Web App True Fullscreen Mode
     function toggleWebFullscreen() {
       const icon = document.getElementById('fsIcon');
       if (!document.fullscreenElement) {
@@ -546,7 +546,7 @@
       }
     }
 
-    // Dynamic Rotating Radar Canvas (Auto width resize)
+    // Dynamic Rotating Radar Canvas
     const canvas = document.getElementById('radarCanvas');
     const ctx = canvas.getContext('2d');
     let width, height;
@@ -610,7 +610,7 @@
       }
     }
 
-    // 100% RELIABLE FULLSCREEN CAMERA ENGINE
+    // AR HUD Camera Engine
     let cameraStream = null;
     let currentFacingMode = "environment";
     let torchActive = false;
