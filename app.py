@@ -11,6 +11,7 @@ import datetime
 import io
 import os
 import urllib.request
+import json
 
 app = FastAPI(
     title="SpectralShield™ Enterprise AI Threat Defense Gateway",
@@ -80,20 +81,50 @@ def compute_spectral_decomposition(X, y, target_class=0, clean_ratio=0.08):
 @app.get("/")
 def serve_index():
     if os.path.exists("index.html"):
-        return FileResponse("index.html")
-    return FileResponse("static/index.html")
+        return FileResponse("index.html", media_type="text/html")
+    if os.path.exists("static/index.html"):
+        return FileResponse("static/index.html", media_type="text/html")
+    raise HTTPException(status_code=404, detail="index.html not found")
 
 @app.get("/manifest.json")
 def serve_manifest():
-    if os.path.exists("manifest.json"):
-        return FileResponse("manifest.json")
-    return FileResponse("static/manifest.json")
+    for path in ["manifest.json", "static/manifest.json"]:
+        if os.path.exists(path):
+            return FileResponse(path, media_type="application/manifest+json")
+    
+    fallback_manifest = {
+        "name": "SpectralShield AI - Enterprise Defense",
+        "short_name": "SpectralShield",
+        "start_url": "/",
+        "display": "fullscreen",
+        "background_color": "#020510",
+        "theme_color": "#06b6d4",
+        "orientation": "any",
+        "icons": [
+            {
+                "src": "https://cdn-icons-png.flaticon.com/512/2092/2092663.png",
+                "sizes": "512x512",
+                "type": "image/png",
+                "purpose": "any maskable"
+            }
+        ]
+    }
+    return Response(content=json.dumps(fallback_manifest), media_type="application/manifest+json")
 
 @app.get("/sw.js")
 def serve_sw():
-    if os.path.exists("sw.js"):
-        return FileResponse("sw.js")
-    return FileResponse("static/sw.js")
+    for path in ["sw.js", "static/sw.js"]:
+        if os.path.exists(path):
+            return FileResponse(path, media_type="application/javascript")
+    
+    fallback_sw = """
+    self.addEventListener('install', (e) => { self.skipWaiting(); });
+    self.addEventListener('activate', (e) => { e.waitUntil(clients.claim()); });
+    self.addEventListener('fetch', (e) => {
+        e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+    });
+    """
+    return Response(content=fallback_sw, media_type="application/javascript")
 
 @app.get("/api/v1/system/health")
 def health_check():
@@ -261,7 +292,6 @@ async def audit_dataset_enterprise(
 
 @app.post("/api/v1/scan/audit-url")
 async def audit_dataset_from_url(payload: CloudScanRequest):
-    """Scans dataset directly from a remote cloud URL (Kaggle, HuggingFace, GitHub RAW)."""
     start_time = datetime.datetime.now()
     try:
         req = urllib.request.Request(payload.url, headers={'User-Agent': 'SpectralShield-SOC/4.0'})
